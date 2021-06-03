@@ -9,4 +9,4 @@ tests:
         harness_config:
           type: multi_line
           regex:
-            - "*Example finished successfully!*"
+            - ".*Example finished successfully!.*"
