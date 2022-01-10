@@ -35,6 +35,8 @@ manifest:
       url-base: https://github.com/PelionIoT
     - name: memfault
       url-base: https://github.com/memfault
+    - name: sebo
+      url-base: https://github.com/SebastianBoe
 
   # If not otherwise specified, the projects below should be obtained
   # from the ncs remote.
@@ -53,8 +55,9 @@ manifest:
     # https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/zephyr/introduction/index.html
     # https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/zephyr/guides/modules.html
     - name: zephyr
-      repo-path: sdk-zephyr
-      revision: pull/683/head
+      repo-path: fw-nrfconnect-zephyr
+      revision: pull/2/head
+      remote: sebo
       import:
         # In addition to the zephyr repository itself, NCS also
         # imports the contents of zephyr/west.yml at the above
@@ -107,11 +110,12 @@ manifest:
     - name: mbedtls-nrf
       path: mbedtls
       repo-path: sdk-mbedtls
-      revision: 8df2f8e7b9c7bb9390ac74bb7bace27edca81a2b
+      revision: pull/1/head
     - name: nrfxlib
-      repo-path: sdk-nrfxlib
+      repo-path: nrfxlib
       path: nrfxlib
-      revision: pull/613/head
+      revision: pull/1/head
+      remote: sebo
     - name: trusted-firmware-m
       repo-path: sdk-trusted-firmware-m
       path: modules/tee/tf-m/trusted-firmware-m
