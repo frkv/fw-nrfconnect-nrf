@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *
  */
-
+#include "common.h"
 #include "tfm_hal_platform.h"
 #include "tfm_hal_platform_common.h"
 #include "cmsis.h"
@@ -28,7 +28,14 @@ enum tfm_hal_status_t tfm_hal_platform_init(void)
 	int err;
 
 	/* Initialize the nrf_cc3xx runtime */
+#if defined(PSA_WANT_ALG_CTR_DRBG)
 	err = nrf_cc3xx_platform_init();
+#elif defined (PSA_WANT_ALG_HMAC_DRBG)
+	err = nrf_cc3xx_platform_init_hmac_drbg();
+#else
+	#error Please enable either PSA_WANT_ALG_CTR_DRBG or PSA_WANT_ALG_HMAC_DRBG
+#endif
+
 	if (err != NRF_CC3XX_PLATFORM_SUCCESS) {
 		return TFM_HAL_ERROR_BAD_STATE;
 	}
