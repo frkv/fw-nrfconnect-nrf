@@ -1,0 +1,27 @@
+#
+# Copyright (c) 2022 Nordic Semiconductor ASA
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+
+config IDENTITY_KEY
+	bool "Identity key stored in KMU"
+	depends on HAS_HW_NRF_CC310 || HAS_HW_NRF_CC312
+	depends on NRF_CC3XX_PLATFORM
+	depends on NRF_SECURITY
+	depends on !ARM_NONSECURE_FIRMWARE
+	help
+	  This option adds support for retrieving an identity key stored
+	  in the KMU. The key is stored in an encrypted form and is decrypted
+	  by the identity key APIs,
+if IDENTITY_KEY
+
+config IDENTITY_KEY_RANDOM
+	bool "Enable writing a random identity key to KMU"
+	depends on MAIN_STACK_SIZE >= 2048
+	help
+	  This option adds support for generating an identity key and writing
+	  it in an encrypted form in the KMU. The key generation will happen
+	  once in the system. This feature is not required if the identity
+	  key is provid
+endif # IDENTITY_KEY_RANDOM
