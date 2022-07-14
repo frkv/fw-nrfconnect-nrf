@@ -10,6 +10,9 @@
 #include "psa/crypto_types.h"
 #include "tfm_plat_crypto_keys.h"
 #include <hw_unique_key.h>
+#include <nrf_cc3xx_platform_kmu.h>
+#include <nrf_cc3xx_platform_identity_key.h>
+#include <nrf_cc3xx_platform_defines.h>
 
 #ifdef NRF5340_XXAA_APPLICATION
 #define TFM_KEY_LEN_BYTES  32
@@ -40,18 +43,21 @@ tfm_plat_get_initial_attest_key(uint8_t *key_buf, uint32_t size,
 				struct ecc_key_t *ecc_key,
 				psa_ecc_family_t *curve_type)
 {
-	uint8_t key_label[] = "tfm_initial_attest_key";
 	int err;
 
-	if (size < 32) {
+	if (size != 32) {
 		return TFM_PLAT_ERR_INVALID_INPUT;
 	}
 
-	err  = hw_unique_key_derive_key(HUK_KEYSLOT_MKEK, NULL, 0,
-					key_label, sizeof(key_label) - 1,
-					key_buf, size);
-	if (err) {
-		return TFM_PLAT_ERR_SYSTEM_ERR;
+	err = nrf_cc3xx_platform_identity_key_retrieve(
+		NRF_KMU_SLOT_KIDENT,
+		key_buf);
+
+	switch (err) {
+		case NRF_CC3XX_PLATFORM_SUCCESS:
+			break;
+		default:
+			return TFM_PLAT_ERR_SYSTEM_ERR;
 	}
 
 	ecc_key->priv_key = key_buf;
